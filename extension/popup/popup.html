@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      width: 220px;
+      background: #09090b;
+      color: #e4e4e7;
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 11px;
+      padding: 12px;
+    }
+    h1 { color: #22c55e; font-size: 11px; letter-spacing: 0.15em; margin-bottom: 8px; }
+    .status { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; }
+    .row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #27272a; }
+    .label { color: #71717a; }
+    .value { color: #d4d4d8; font-weight: 600; }
+    button {
+      margin-top: 10px;
+      width: 100%;
+      padding: 6px;
+      background: #22c55e;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    button:hover { background: #16a34a; }
+    .offline { color: #ef4444; }
+  </style>
+</head>
+<body>
+  <h1>◈ AI ANALYST</h1>
+  <div class="status">
+    <div class="dot" id="dot" style="background:#71717a"></div>
+    <span id="status-text">Checking server…</span>
+  </div>
+  <div id="stats"></div>
+  <button id="open-btn">Open Sidebar</button>
+  <script src="popup.js"></script>
+</body>
+</html>

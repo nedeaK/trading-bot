@@ -6,6 +6,7 @@ Functions that transform data return new instances.
 
 from dataclasses import dataclass, field
 from datetime import datetime
+from enum import Enum, auto
 from typing import Any, Dict, List, Optional, Tuple
 
 from config.constants import (
@@ -17,6 +18,13 @@ from config.constants import (
     TrendType,
     ZoneType,
 )
+
+
+class VerdictType(Enum):
+    """AI analyst verdict on a trade signal."""
+    TRADE = "TRADE"   # High conviction — enter now
+    WAIT = "WAIT"     # Setup forming but not ready
+    SKIP = "SKIP"     # Red flags — pass on this setup
 
 
 @dataclass(frozen=True)
@@ -233,3 +241,34 @@ class Signal:
         if self.risk == 0:
             return 0.0
         return self.reward / self.risk
+
+
+@dataclass(frozen=True)
+class MarketContext:
+    """Aggregated market-wide context used by the AI analyst."""
+    atr: float                    # Average True Range (14-period)
+    atr_percentile: float         # 0-100 vs trailing 252 days
+    volatility_state: str         # "CALM" | "NORMAL" | "ELEVATED" | "CRISIS"
+    trend_regime: str             # "TRENDING" | "RANGING" | "TRANSITIONING"
+    spy_trend: str                # "BULLISH" | "BEARISH" | "NEUTRAL"
+    spy_vs_20ma: float            # % price is above/below SPY 20-day MA
+    vix_level: float              # VIX close (0.0 if unavailable)
+    sector_etf: str               # e.g. "XLK", "XLF"
+    sector_trend: str             # "BULLISH" | "BEARISH" | "NEUTRAL"
+    sector_vs_20ma: float         # % price is above/below sector 20-day MA
+    instrument_trend: str         # Trend of the traded instrument itself
+    instrument_vs_20ma: float     # % above/below instrument 20-day MA
+
+
+@dataclass(frozen=True)
+class AIAnalysis:
+    """Result of the AI analyst evaluation of a trade signal."""
+    confidence: int               # 0-100 composite conviction score
+    verdict: str                  # "TRADE" | "SKIP" | "WAIT"
+    thesis: str                   # Written rationale (2-3 sentences)
+    concerns: Tuple[str, ...]     # List of identified risk factors
+    size_adjustment: float        # Multiplier on base risk% (0.5–1.5)
+    invalidation_level: float     # Price at which thesis is wrong
+    analyst_notes: str            # Post-entry monitoring note
+    ml_score: float               # 0-100 from ML pattern scorer
+    source: str = "heuristic"     # "claude" | "heuristic" | "ml_only"

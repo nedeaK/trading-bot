@@ -24,3 +24,10 @@ everything-claude-code/
 *.pdf
 temp_frames/
 pdf_frames/
+sidebar/node_modules
+sidebar/dist
+__pycache__
+*.pyc
+.env
+models/*.pkl
+memory/trades.jsonl

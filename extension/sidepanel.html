@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Trading Analyst</title>
+  <style>
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #09090b; overflow: hidden; }
+    iframe { width: 100%; height: 100%; border: none; }
+  </style>
+</head>
+<body>
+  <!--
+    In development: points to Vite dev server
+    In production:  sidebar/dist is copied here during build
+  -->
+  <iframe src="http://localhost:5173" id="app-frame"></iframe>
+  <script>
+    // Auto-populate symbol from content script detection
+    chrome.storage.session.onChanged.addListener((changes) => {
+      if (changes.detectedSymbol) {
+        const frame = document.getElementById('app-frame')
+        if (frame && frame.contentWindow) {
+          frame.contentWindow.postMessage(
+            { type: 'SET_SYMBOL', symbol: changes.detectedSymbol.newValue },
+            '*'
+          )
+        }
+      }
+    })
+  </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{
+  "manifest_version": 3,
+  "name": "SMC AI Trading Analyst",
+  "version": "1.0.0",
+  "description": "AI-powered Smart Money Concepts trading analyst sidebar",
+
+  "permissions": [
+    "sidePanel",
+    "storage",
+    "alarms"
+  ],
+
+  "host_permissions": [
+    "http://localhost:7474/*"
+  ],
+
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": "icons/icon.svg",
+    "default_title": "AI Trading Analyst"
+  },
+
+  "icons": {
+    "128": "icons/icon.svg"
+  },
+
+  "content_scripts": [
+    {
+      "matches": [
+        "*://finance.yahoo.com/*",
+        "*://www.tradingview.com/*",
+        "*://finviz.com/*",
+        "*://stockanalysis.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
